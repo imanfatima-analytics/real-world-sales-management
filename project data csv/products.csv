@@ -1,0 +1,11 @@
+Product_id,product_name,category,brand,unit_price,cost_price
+101,Laptop Pro 14,Electronics,Dell,185000,150000
+102,Business Laptop 15,Electronics,HP,145000,115000
+103,Wireless Mouse,Accessories,Logitech,3500,2200
+104,Mechanical Keyboard,Accessories,Logitech,8500,5500
+105,24-inch Monitor,Electronics,Samsung,42000,32000
+106,Office Chair,Furniture,IKEA,38000,27000
+107,Office Desk,Furniture,IKEA,52000,36000
+108,Noise Cancelling Headphones,Audio,Sony,28000,19000
+109,External SSD 1TB,Storage,Samsung,30000,21500
+110,Webcam Full HD,Electronics,Logitech,12000,8000

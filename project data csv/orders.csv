@@ -1,0 +1,16 @@
+order_id,customer_id,order_date,order_status,sales_channel,shipping_city
+1001,1,1/5/2025,Completed,Website,Lahore
+1002,2,1/7/2025,Completed,Mobile App,Karachi
+1003,3,1/10/2025,Shipped,Website,Islamabad
+1004,1,1/15/2025,Completed,Sales Team,Lahore
+1005,4,1/18/2025,Cancelled,Marketplace,Rawalpindi
+1006,5,2/2/2025,Completed,Website,Faisalabad
+1007,6,2/8/2025,Completed,Mobile App,Multan
+1008,7,2/14/2025,Processing,Website,Peshawar
+1009,8,2/20/2025,Completed,Marketplace,Lahore
+1010,9,3/3/2025,Completed,Website,Karachi
+1011,10,3/9/2025,Returned,Mobile App,Sialkot
+1012,2,3/15/2025,Completed,Sales Team,Karachi
+1013,3,3/21/2025,Completed,Website,Islamabad
+1014,5,4/4/2025,Shipped,Marketplace,Faisalabad
+1015,1,4/12/2025,Completed,Website,Lahore

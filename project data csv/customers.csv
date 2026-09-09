@@ -1,0 +1,11 @@
+customer_id,customer_name,email,city,region
+1,Ali Khan,ali.khan@example.com,Lahore,Punjab
+2,Sara Ahmed,sara.ahmed@example.com,Karachi,Sindh
+3,Hassan Raza,hassan.raza@example.com,Islamabad,Islamabad Capital
+4,Ayesha Malik,ayesha.malik@example.com,Rawalpindi,Punjab
+5,Usman Tariq,usman.tariq@example.com,Faisalabad,Punjab
+6,Hina Shah,hina.shah@example.com,Multan,Punjab
+7,Hamza Ali,hamza.ali@example.com,Peshawar,KPK
+8,Zara Noor,zara.noor@example.com,Lahore,Punjab
+9,Bilal Ahmed,bilal.ahmed@example.com,Karachi,Sindh
+10,Maham Iqbal,maham.iqbal@example.com,Sialkot,Punjab
