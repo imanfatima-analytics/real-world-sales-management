@@ -1,946 +1,580 @@
 
 
-````markdown
-# Real-World Sales Management Analysis
+# Real-World Sales Management & Business Analytics
 
 ## Project Overview
 
-This project is an end-to-end Sales Management and Business Analytics project built using PostgreSQL and Python.
+This project is an end-to-end **Sales Management and Business Analytics solution** developed using **PostgreSQL and Python**.
 
-The project demonstrates how external sales data can be transformed into a structured relational database, validated, analyzed using SQL, and further processed using Python and Pandas to generate meaningful business insights.
+The project simulates a real-world business environment in which raw sales data is transformed into a structured relational database, validated for data quality, analyzed using SQL, and further processed with Python and Pandas to generate actionable business insights.
 
-The project follows a realistic data analytics workflow:
+The complete analytical workflow follows:
 
-Raw Data → Data Profiling → Data Cleaning → Entity Identification → Schema Design → PostgreSQL Database → Data Validation → SQL Analysis → Advanced SQL → Views & Indexes → Python Integration → Pandas Analysis → Business Insights
+**Raw Data → Data Profiling → Data Cleaning → Entity Identification → Schema Design → PostgreSQL Database → Data Validation → SQL Analysis → Advanced SQL → Views & Indexes → Python Integration → Pandas Analysis → KPI Development → Business Insights**
 
+The project demonstrates practical skills in **relational database design, SQL analytics, data validation, database optimization, Python integration, and business intelligence**.
 
-## Business Problem
+---
 
-A company wants to understand its sales performance across customers, products, categories, cities, sales channels, order statuses, and payment activity.
+# Business Problem
 
-The objective of this project is to answer important business questions such as:
+A company needs a reliable analytical system to understand its sales performance across multiple business dimensions, including:
 
-- Which product generates the highest sales?
-- Which category performs best?
-- Which customer spends the most?
-- Which city generates the highest sales?
-- Which sales channel performs best?
-- What is the Average Order Value?
-- What are the monthly sales trends?
-- Which products sell the highest quantity?
-- What is the distribution of order statuses?
-- Which payment methods are used most frequently?
-
-
-## Project Objectives
-
-The main objectives of this project are:
-
-1. Design a normalized relational database.
-2. Import external CSV data into PostgreSQL.
-3. Validate data quality and relationships.
-4. Perform business analysis using SQL.
-5. Apply advanced SQL techniques.
-6. Create reusable database views.
-7. Add database indexes.
-8. Connect PostgreSQL with Python.
-9. Analyze data using Pandas.
-10. Calculate important business KPIs.
-11. Perform customer, product, category, and sales trend analysis.
-12. Apply Python testing and error handling.
-13. Generate actionable business insights.
-
-
-## Technologies Used
-
-### Database
-
-- PostgreSQL
-- pgAdmin 4
-- SQL
-
-### SQL Concepts
-
-- SELECT
-- WHERE
-- ORDER BY
-- GROUP BY
-- Aggregate Functions
-- CASE
-- INNER JOIN
-- LEFT JOIN
-- Subqueries
-- CTEs
-- Window Functions
-- RANK
-- ROW_NUMBER
-- DENSE_RANK
-- Running Totals
-- Views
-- Indexes
-- Primary Keys
-- Foreign Keys
-- Database Relationships
-- Data Validation
-
-### Python
-
-- Python
-- Pandas
-- SQLAlchemy
-- psycopg2
-- Pytest
-- Logging
-- Exception Handling
-
-
-## Database
-
-Database Name:
-
-`real_world_sales`
-
-The database contains five main tables:
-
-1. customers
-2. products
-3. orders
-4. order_items
-5. payments
-
-
-## Database Schema
-
-### Customers
-
-Stores customer information.
-
-Columns:
-
-- customer_id
-- customer_name
-- email
-- city
-- region
-
-Primary Key:
-
-`customer_id`
-
-
-### Products
-
-Stores product information.
-
-Columns:
-
-- product_id
-- product_name
-- category
-- brand
-- unit_price
-- cost_price
-
-Primary Key:
-
-`product_id`
-
-
-### Orders
-
-Stores customer order information.
-
-Columns:
-
-- order_id
-- customer_id
-- order_date
-- order_status
-- sales_channel
-- shipping_city
-
-Primary Key:
-
-`order_id`
-
-Foreign Key:
-
-`customer_id → customers.customer_id`
-
-
-### Order Items
-
-Stores individual products included in orders.
-
-Columns:
-
-- order_item_id
-- order_id
-- product_id
-- quantity
-- unit_price
-- discount_pct
-
-Primary Key:
-
-`order_item_id`
-
-Foreign Keys:
-
-`order_id → orders.order_id`
-
-`product_id → products.product_id`
-
-
-### Payments
-
-Stores payment information.
-
-Columns:
-
-- payment_id
-- order_id
-- payment_date
-- payment_method
-- payment_status
-- amount
-
-Primary Key:
-
-`payment_id`
-
-Foreign Key:
-
-`order_id → orders.order_id`
-
-
-## Database Relationships
-
-The database follows these relationships:
-
-```text
-Customers
-    |
-    | 1
-    |
-    | Many
-    ↓
-  Orders
-    |
-    | 1
-    |
-    | Many
-    ↓
-Order_Items
-    ↑
-    |
-    | Many
-    |
-    | 1
-Products
-
-
-Orders
-    |
-    | 1
-    |
-    | 1
-    ↓
-Payments
-````
-
-### Relationship Summary
-
-* One customer can have many orders.
-* One order can contain many order items.
-* One product can appear in many order items.
-* Order_Items connects Orders and Products.
-* Each order has a payment record in this project dataset.
-
-## Data Preparation
-
-The external CSV data was profiled and validated before analysis.
-
-The following checks were performed:
-
-* Duplicate IDs
-* Missing values
-* Invalid values
-* Data types
-* Blank values
-* Extra spaces
-* Invalid categories
-* Invalid prices
-* Negative values
-* Discount validation
-* Primary key integrity
-* Foreign key integrity
-* Business rule validation
-
-The dataset passed the required validation checks for this project.
-
-## Dataset
-
-The project uses five CSV files:
-
-```text
-customers.csv
-products.csv
-orders.csv
-order_items.csv
-payments.csv
-```
-
-The data was imported into PostgreSQL after profiling and validation.
-
-## Data Import
-
-The following CSV files were imported into PostgreSQL:
-
-* customers.csv → customers
-* products.csv → products
-* orders.csv → orders
-* order_items.csv → order_items
-* payments.csv → payments
-
-Parent tables were imported before dependent tables to maintain referential integrity.
-
-## Data Validation
-
-Data validation was performed after importing the CSV files.
-
-Validation included:
-
-### Row Counts
-
-Expected dataset size:
-
-| Table       | Rows |
-| ----------- | ---: |
-| customers   |   10 |
-| products    |   10 |
-| orders      |   15 |
-| order_items |   23 |
-| payments    |   15 |
-
-### Foreign Key Validation
-
-The following relationships were validated:
-
-* Orders → Customers
-* Order_Items → Orders
-* Order_Items → Products
-* Payments → Orders
-
-### Business Rule Validation
-
-The following rules were checked:
-
-* Quantity must be greater than zero.
-* Discount percentage must be between 0 and 100.
-* Unit price must be greater than zero.
-* Product prices must be valid.
-* Cost price must be lower than unit price.
-* Payment amount must not be negative.
-
-## SQL Analysis
-
-SQL was used to perform both basic and advanced business analysis.
-
-The project includes analysis for:
-
-* Customer sales
-* Product performance
-* Category performance
+* Customers
+* Products
+* Product categories
+* Brands
+* Cities and regions
 * Sales channels
 * Order statuses
 * Payment methods
-* Monthly sales
-* Average Order Value
-* Top customers
-* Top products
-* Sales contribution
-* Running sales
-* Ranking analysis
-
-## Advanced SQL Analysis
-
-Advanced PostgreSQL techniques were used throughout the project.
-
-### Subqueries
-
-Subqueries were used to compare records against calculated values such as average order amounts.
-
-### Common Table Expressions
-
-CTEs were used to simplify multi-stage queries and make complex analysis easier to understand.
-
-### Window Functions
-
-Window functions were used for:
-
-* Customer ranking
-* Product ranking
-* Category ranking
-* Running totals
-* Sales ranking
-
-Example:
-
-```sql
-RANK() OVER (
-    ORDER BY total_sales DESC
-)
-```
-
-## Views
-
-The project includes reusable analytical views.
-
-### Sales Analysis View
-
-`sales_analysis`
-
-Provides detailed sales information by combining:
-
-* Orders
-* Customers
-* Order Items
-* Products
-
-### Customer Sales View
-
-`customer_sales`
-
-Provides total spending by customer.
-
-### Product Performance View
-
-`product_performance`
-
-Provides product-level sales and quantity performance.
-
-## Indexing
-
-An index was created on the customer foreign key in the orders table:
-
-```sql
-CREATE INDEX idx_orders_customer_id
-ON orders (customer_id);
-```
-
-Indexes can improve query performance for frequently filtered or joined columns.
-
-## Python + PostgreSQL Integration
-
-Python was connected to PostgreSQL using SQLAlchemy and psycopg2.
-
-The architecture is:
-
-```text
-PostgreSQL
-     ↓
-SQLAlchemy
-     ↓
-Python
-     ↓
-Pandas
-     ↓
-Business Analysis
-```
-
-Pandas was used to load PostgreSQL query results into DataFrames for further analysis.
-
-## Python Analysis
-
-Python was used to perform:
-
-* PostgreSQL data loading
-* Data exploration
-* Sales calculations
-* KPI calculations
-* Customer analysis
-* Product analysis
-* Category analysis
-* Monthly sales analysis
-* Business summary generation
-
-## Sales Calculation
-
-Sales amount was calculated using:
-
-```text
-Sales Amount =
-Quantity × Unit Price × (1 − Discount % / 100)
-```
-
-Python implementation:
-
-```python
-order_items["sales_amount"] = (
-    order_items["quantity"]
-    * order_items["unit_price"]
-    * (1 - order_items["discount_pct"] / 100)
-)
-```
-
-## Business KPIs
-
-The final analysis produced the following KPIs:
-
-| KPI                 |           Result |
-| ------------------- | ---------------: |
-| Total Sales         | Rs. 1,363,325.00 |
-| Total Orders        |               15 |
-| Average Order Value |    Rs. 90,888.33 |
-| Total Quantity Sold |               30 |
-| Total Customers     |               10 |
-
-## Key Business Results
-
-### Top Customer
-
-**Ali Khan**
-
-Total Sales:
-
-**Rs. 458,400.00**
-
-### Top Product
-
-**Laptop Pro 14**
-
-Total Sales:
-
-**Rs. 521,700.00**
-
-### Top Category
-
-**Electronics**
-
-Total Sales:
-
-**Rs. 941,850.00**
-
-### Top Sales City
-
-**Lahore**
-
-Total Sales:
-
-**Rs. 632,100.00**
-
-### Best Sales Channel
-
-**Website**
-
-Total Sales:
-
-**Rs. 816,650.00**
-
-## Order Status Analysis
-
-The dataset contains the following order statuses:
-
-| Status     | Orders |
-| ---------- | -----: |
-| Completed  |     10 |
-| Shipped    |      2 |
-| Cancelled  |      1 |
-| Processing |      1 |
-| Returned   |      1 |
-
-## Business Insights
-
-### 1. Electronics is the strongest category
-
-Electronics generated the highest sales in the dataset, with total sales of:
-
-**Rs. 941,850.00**
-
-This indicates strong demand for electronic products.
-
-### 2. Laptop Pro 14 is the leading product
-
-Laptop Pro 14 generated the highest product sales:
-
-**Rs. 521,700.00**
-
-The business should maintain sufficient inventory and consider cross-selling complementary products.
-
-### 3. Ali Khan is the highest-spending customer
-
-Ali Khan generated:
-
-**Rs. 458,400.00**
-
-Customer retention strategies such as personalized offers, loyalty benefits, and relevant cross-selling can be considered.
-
-### 4. Lahore generated the highest sales
-
-Lahore generated:
-
-**Rs. 632,100.00**
-
-This indicates strong sales activity in the Lahore market.
-
-### 5. Website is the strongest sales channel
-
-The Website generated:
-
-**Rs. 816,650.00**
-
-The business can continue investing in website customer experience and digital sales strategies.
-
-### 6. Average Order Value
-
-The Average Order Value is:
-
-**Rs. 90,888.33**
-
-This KPI can be used as a baseline for evaluating future order-size performance.
-
-### 7. Order Status Monitoring
-
-Cancelled, returned, and processing orders should be monitored separately because they may indicate operational or fulfillment issues.
-
-## Business Recommendations
-
-### Inventory
-
-Maintain sufficient inventory for high-performing products, particularly Laptop Pro 14.
-
-### Cross-Selling
-
-Create bundles around high-performing products using complementary products such as accessories and peripherals.
-
-### Category Strategy
-
-Continue focused inventory and marketing planning for the Electronics category.
-
-### Customer Retention
-
-Prioritize high-value customers with:
-
-* Personalized offers
-* Loyalty benefits
-* Relevant product recommendations
-* Cross-selling opportunities
-
-### Sales Channel Strategy
-
-Continue improving the Website channel because it generated the highest sales.
-
-### Operational Improvement
-
-Review cancelled, returned, and processing orders to identify potential fulfillment or operational problems.
-
-## Testing
-
-Pytest was used to test Python functions and business calculations.
-
-Example sales calculation:
-
-```python
-def calculate_sales(quantity, unit_price, discount_pct):
-    return quantity * unit_price * (1 - discount_pct / 100)
-```
-
-Tests were created for:
-
-* Sales without discount
-* Sales with discount
-* Sales with 5% discount
-* Basic Python functionality
-
-Tests can be executed using:
-
-```cmd
-python -m pytest
-```
-
-## Logging
-
-Python's built-in logging module was used to record application activity.
-
-Logging levels demonstrated include:
-
-* INFO
-* WARNING
-* ERROR
-
-Example:
-
-```python
-import logging
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s"
-)
-
-logging.info("Application started")
-logging.info("Loading sales data")
-logging.warning("This is a warning message")
-logging.error("An error occurred")
-logging.info("Application finished")
-```
-
-## Error Handling
-
-Python `try/except` was used to handle runtime errors.
-
-Example:
-
-```python
-try:
-    result = number / 0
-
-except Exception as e:
-    logging.error("An error occurred: %s", e)
-
-finally:
-    logging.info("Application finished")
-```
-
-This allows the application to handle errors more gracefully and record useful diagnostic information.
-
-## Project Structure
-
-The final professional project can be organized as follows:
-
-```text
-real-world-sales-management/
-│
-├── data/
-│   ├── customers.csv
-│   ├── products.csv
-│   ├── orders.csv
-│   ├── order_items.csv
-│   └── payments.csv
-│
-├── sql/
-│   ├── 01_schema.sql
-│   ├── 02_data_validation.sql
-│   ├── 03_joins.sql
-│   ├── 04_business_questions.sql
-│   ├── 05_advanced_analysis.sql
-│   ├── 06_views.sql
-│   └── 07_indexes.sql
-│
-├── python/
-│   ├── data_analysis.py
-│   ├── test_basics.py
-│   ├── test_sales.py
-│   ├── logging_demo.py
-│   └── error_handling.py
-│
-├── README.md
-├── requirements.txt
-└── LICENSE
-```
-
-## Requirements
-
-The main Python packages used in the project are:
-
-```text
-pandas
-sqlalchemy
-psycopg2-binary
-pytest
-```
-
-Install them using:
-
-```cmd
-python -m pip install pandas
-python -m pip install sqlalchemy
-python -m pip install psycopg2-binary
-python -m pip install pytest
-```
-
-## How to Run the Project
-
-### 1. Install Python
-
-Make sure Python is installed.
-
-Check the version:
-
-```cmd
-python --version
-```
-
-### 2. Install Dependencies
-
-```cmd
-python -m pip install pandas
-python -m pip install sqlalchemy
-python -m pip install psycopg2-binary
-python -m pip install pytest
-```
-
-### 3. Configure PostgreSQL
-
-Create or use the PostgreSQL database:
+* Payment activity
+* Sales trends
+
+The objective is to transform transactional sales data into meaningful information that can support **data-driven business decisions**.
+
+### Key Business Questions
+
+The analysis is designed to answer questions such as:
+
+* Which products generate the highest revenue?
+* Which product categories perform best?
+* Which customers contribute the most revenue?
+* Which cities generate the highest sales?
+* Which sales channel performs best?
+* What is the Average Order Value (AOV)?
+* How do sales change month over month?
+* Which products have the highest quantity sold?
+* What is the distribution of order statuses?
+* Which payment methods are used most frequently?
+* Which products and categories generate the highest profit?
+* Which customers represent the highest-value segment?
+
+---
+
+# Project Objectives
+
+The primary objectives of this project are to:
+
+1. Design a structured and normalized relational database.
+2. Import external CSV data into PostgreSQL.
+3. Profile and clean the source data.
+4. Identify business entities and relationships.
+5. Define primary keys and foreign-key relationships.
+6. Validate data quality and referential integrity.
+7. Perform exploratory and business analysis using SQL.
+8. Apply advanced SQL techniques for analytical queries.
+9. Use CTEs and subqueries to solve complex business problems.
+10. Apply window functions for ranking and trend analysis.
+11. Create reusable SQL views for reporting.
+12. Add indexes to improve query performance.
+13. Connect PostgreSQL with Python.
+14. Retrieve and process database data using Pandas.
+15. Calculate important business KPIs.
+16. Perform customer, product, category, geographic, and sales-channel analysis.
+17. Implement Python logging, testing, and exception handling.
+18. Generate actionable business recommendations from analytical findings.
+
+---
+
+# Technologies Used
+
+## Database & Data Management
+
+* **PostgreSQL**
+* **pgAdmin 4**
+* **SQL**
+
+## SQL Concepts
+
+The project demonstrates practical implementation of:
+
+* `SELECT`
+* `WHERE`
+* `ORDER BY`
+* `GROUP BY`
+* Aggregate Functions
+* `CASE`
+* `INNER JOIN`
+* `LEFT JOIN`
+* Subqueries
+* Common Table Expressions (CTEs)
+* Window Functions
+* `RANK()`
+* `ROW_NUMBER()`
+* `DENSE_RANK()`
+* Running Totals
+* Views
+* Indexes
+* Primary Keys
+* Foreign Keys
+* Referential Integrity
+* Data Validation
+* Relational Database Design
+
+## Python
+
+* **Python**
+* **Pandas**
+* **SQLAlchemy**
+* **psycopg2**
+* **Pytest**
+* **Logging**
+* **Exception Handling**
+
+---
+
+# Database Architecture
+
+## Database Name
 
 ```text
 real_world_sales
 ```
 
-Make sure PostgreSQL is running.
+The database is structured around five core relational tables:
 
-### 4. Run Python Analysis
+1. `customers`
+2. `products`
+3. `orders`
+4. `order_items`
+5. `payments`
 
-```cmd
-python data_analysis.py
-```
+The schema separates customer, product, order, order-line, and payment information to reduce data redundancy and maintain data integrity.
 
-### 5. Run Tests
+---
 
-```cmd
-python -m pytest
-```
+# Database Schema
 
-## Security
+## 1. Customers
 
-Database passwords and other secrets should never be published in GitHub.
+The `customers` table stores customer master information.
 
-Do not commit:
+### Columns
 
-* PostgreSQL passwords
-* API keys
-* Access tokens
-* Private credentials
-* Secret configuration files
+| Column          | Description                |
+| --------------- | -------------------------- |
+| `customer_id`   | Unique customer identifier |
+| `customer_name` | Customer's name            |
+| `email`         | Customer email address     |
+| `city`          | Customer city              |
+| `region`        | Customer region            |
 
-For a production application, database credentials should be stored using environment variables or a secure secrets-management solution.
-
-## Skills Demonstrated
-
-This project demonstrates practical skills in:
-
-### Database Engineering
-
-* PostgreSQL
-* Relational database design
-* Normalization
-* Primary keys
-* Foreign keys
-* Database relationships
-* Data validation
-* Views
-* Indexes
-
-### SQL
-
-* SELECT
-* Filtering
-* Sorting
-* Aggregation
-* GROUP BY
-* CASE
-* JOINs
-* Subqueries
-* CTEs
-* Window functions
-* Ranking
-* Running totals
-
-### Python
-
-* Python programming
-* Pandas
-* SQLAlchemy
-* psycopg2
-* Data analysis
-* Business KPI calculations
-* Testing
-* Logging
-* Exception handling
-
-### Business Analytics
-
-* Customer analysis
-* Product analysis
-* Category analysis
-* Sales channel analysis
-* Sales trend analysis
-* KPI reporting
-* Business insights
-* Business recommendations
-
-## End-to-End Workflow
+**Primary Key:**
 
 ```text
-Raw External Data
-        ↓
-Data Profiling
-        ↓
-Data Cleaning
-        ↓
-Entity Identification
-        ↓
-Schema Design
-        ↓
-PostgreSQL Database
-        ↓
-CSV Import
-        ↓
-Data Validation
-        ↓
-Relationships & JOINs
-        ↓
-Business Questions
-        ↓
-Advanced SQL Analysis
-        ↓
-Views & Indexes
-        ↓
-Python + PostgreSQL
-        ↓
-Pandas Analysis
-        ↓
-Business KPIs
-        ↓
-Testing
-        ↓
-Business Insights
-        ↓
-Documentation
+customer_id
 ```
 
-## Future Development
+---
 
-This project provides a foundation for further development into:
+## 2. Products
 
-* REST APIs
-* FastAPI backend applications
-* Automated reporting
-* AI-powered analytics
-* LLM integrations
-* Retrieval-Augmented Generation (RAG)
-* AI agents
-* Workflow automation
-* Business process automation
+The `products` table stores product master data and pricing information.
 
-## Project Outcome
+### Columns
 
-This project demonstrates an end-to-end approach to working with business data.
+| Column         | Description               |
+| -------------- | ------------------------- |
+| `product_id`   | Unique product identifier |
+| `product_name` | Product name              |
+| `category`     | Product category          |
+| `brand`        | Product brand             |
+| `unit_price`   | Selling price per unit    |
+| `cost_price`   | Product cost              |
 
-The workflow starts with external raw data, converts it into a normalized PostgreSQL database, validates relationships and business rules, performs advanced SQL analysis, connects the database with Python, performs Pandas-based analysis, applies testing and error handling, and produces business insights and recommendations.
+**Primary Key:**
 
-The project demonstrates the ability to work across both database and Python environments and provides a foundation for future backend engineering, AI, and automation projects.
+```text
+product_id
+```
 
-## Author
+The difference between `unit_price` and `cost_price` can also be used to analyze product-level profitability.
 
-**Iman Fatima**
+---
 
-Aspiring AI Automation & Backend Engineer
+## 3. Orders
 
-### Technical Focus
+The `orders` table stores information about customer orders.
 
-**PostgreSQL | SQL | Python | Pandas | SQLAlchemy | Pytest | Data Analytics | Backend Engineering | AI Automation**
+### Columns
 
-````
+| Column          | Description                                |
+| --------------- | ------------------------------------------ |
+| `order_id`      | Unique order identifier                    |
+| `customer_id`   | Customer who placed the order              |
+| `order_date`    | Date of order                              |
+| `order_status`  | Current order status                       |
+| `sales_channel` | Channel through which the order was placed |
+| `shipping_city` | Order delivery city                        |
+
+**Primary Key:**
+
+```text
+order_id
+```
+
+**Foreign Key:**
+
+```text
+customer_id → customers.customer_id
+```
+
+This establishes a **one-to-many relationship** between customers and orders.
+
+---
+
+## 4. Order Items
+
+The `order_items` table stores the individual products contained within each order.
+
+### Columns
+
+| Column          | Description                  |
+| --------------- | ---------------------------- |
+| `order_item_id` | Unique order-line identifier |
+| `order_id`      | Associated order             |
+| `product_id`    | Purchased product            |
+| `quantity`      | Number of units purchased    |
+| `unit_price`    | Selling price per unit       |
+| `discount_pct`  | Discount percentage applied  |
+
+**Primary Key:**
+
+```text
+order_item_id
+```
+
+**Foreign Keys:**
+
+```text
+order_id → orders.order_id
+product_id → products.product_id
+```
+
+This table acts as the transactional **order-line table**, connecting orders with products.
+
+---
+
+## 5. Payments
+
+The `payments` table stores payment transactions associated with customer orders.
+
+### Columns
+
+| Column           | Description               |
+| ---------------- | ------------------------- |
+| `payment_id`     | Unique payment identifier |
+| `order_id`       | Associated order          |
+| `payment_date`   | Date of payment           |
+| `payment_method` | Payment method used       |
+| `payment_status` | Payment status            |
+| `amount`         | Payment amount            |
+
+**Primary Key:**
+
+```text
+payment_id
+```
+
+**Foreign Key:**
+
+```text
+order_id → orders.order_id
+```
+
+---
+
+# Database Relationships
+
+The relational structure can be represented as follows:
+
+```text
+                    ┌──────────────┐
+                    │  CUSTOMERS   │
+                    │──────────────│
+                    │ customer_id  │
+                    │ customer_name│
+                    │ city         │
+                    │ region       │
+                    └──────┬───────┘
+                           │
+                         1 │
+                           │
+                         Many
+                           │
+                    ┌──────▼───────┐
+                    │    ORDERS    │
+                    │──────────────│
+                    │ order_id     │
+                    │ customer_id  │
+                    │ order_date   │
+                    │ order_status │
+                    │ sales_channel│
+                    └───┬──────┬───┘
+                        │      │
+                      1 │      │ 1
+                        │      │
+                     Many     Many
+                        │      │
+             ┌──────────▼─┐  ┌─▼───────────┐
+             │ ORDER_ITEMS│  │  PAYMENTS   │
+             │────────────│  │─────────────│
+             │ order_item │  │ payment_id  │
+             │ order_id   │  │ order_id    │
+             │ product_id │  │ payment_date│
+             │ quantity   │  │ method      │
+             │ unit_price │  │ status      │
+             │ discount   │  │ amount      │
+             └──────┬─────┘  └─────────────┘
+                    │
+                  Many
+                    │
+                    │
+                    │ 1
+             ┌──────▼──────┐
+             │  PRODUCTS   │
+             │─────────────│
+             │ product_id  │
+             │ product_name│
+             │ category    │
+             │ brand       │
+             │ unit_price  │
+             │ cost_price  │
+             └─────────────┘
+```
+
+### Relationship Summary
+
+| Relationship           | Cardinality | Purpose                                       |
+| ---------------------- | ----------- | --------------------------------------------- |
+| Customers → Orders     | 1 : Many    | One customer can place multiple orders        |
+| Orders → Order Items   | 1 : Many    | One order can contain multiple products       |
+| Products → Order Items | 1 : Many    | One product can appear in many order lines    |
+| Orders → Payments      | 1 : Many*   | An order can have one or more payment records |
+
+> *The actual cardinality should reflect the business rules and data model implemented in PostgreSQL. If the system guarantees exactly one payment per order, this can instead be modeled as **1:1** with an appropriate uniqueness constraint.
+
+---
+
+# Analytical Workflow
+
+The project follows a structured analytics pipeline:
+
+```text
+Raw CSV Data
+     ↓
+Data Profiling
+     ↓
+Data Cleaning
+     ↓
+Entity Identification
+     ↓
+Relational Schema Design
+     ↓
+PostgreSQL Database
+     ↓
+Data Import
+     ↓
+Data Validation
+     ↓
+SQL Analysis
+     ↓
+Advanced SQL
+     ↓
+Views & Index Optimization
+     ↓
+Python + SQLAlchemy
+     ↓
+Pandas Analysis
+     ↓
+KPI Calculation
+     ↓
+Business Insights
+     ↓
+Actionable Recommendations
+```
+
+---
+
+# Expected Business KPIs
+
+The project can calculate key sales-performance metrics including:
+
+### Total Revenue
+
+Total value generated from sales transactions.
+
+### Total Orders
+
+Number of unique customer orders.
+
+### Total Quantity Sold
+
+Total number of product units sold.
+
+### Average Order Value
+
+Average revenue generated per order.
+
+```text
+AOV = Total Revenue / Total Orders
+```
+
+### Gross Profit
+
+```text
+Gross Profit = Sales Revenue - Product Cost
+```
+
+### Profit Margin
+
+```text
+Profit Margin = Gross Profit / Sales Revenue × 100
+```
+
+### Customer Revenue
+
+Total revenue generated by each customer.
+
+### Product Revenue
+
+Total sales generated by each product.
+
+### Category Revenue
+
+Revenue contribution of each product category.
+
+### Monthly Sales
+
+Sales performance grouped by month to identify trends and seasonality.
+
+---
+
+# Advanced Analytics
+
+The project goes beyond basic SQL aggregation by implementing advanced analytical techniques.
+
+### Ranking Analysis
+
+Window functions such as:
+
+```sql
+RANK()
+ROW_NUMBER()
+DENSE_RANK()
+```
+
+can be used to identify:
+
+* Top products
+* Top customers
+* Top cities
+* Top categories
+* Regional rankings
+
+### Running Totals
+
+Running totals can be used to understand cumulative revenue over time.
+
+### Common Table Expressions
+
+CTEs can break complex analytical queries into logical and reusable stages.
+
+### Views
+
+Database views can provide reusable datasets for:
+
+* Sales reporting
+* Customer analysis
+* Product performance
+* Monthly trends
+* Management dashboards
+
+### Indexing
+
+Indexes can be added to frequently queried columns to improve database query performance, particularly on:
+
+* Foreign keys
+* Order dates
+* Customer IDs
+* Product IDs
+* Frequently filtered business attributes
+
+---
+
+# Python Integration
+
+After completing the SQL analysis, PostgreSQL is connected to Python using tools such as **SQLAlchemy and psycopg2**.
+
+Python is used to:
+
+1. Establish a secure database connection.
+2. Execute SQL queries.
+3. Retrieve analytical datasets.
+4. Load results into Pandas DataFrames.
+5. Perform additional data analysis.
+6. Calculate KPIs.
+7. Validate analytical outputs.
+8. Generate business insights.
+
+Example workflow:
+
+```text
+PostgreSQL
+     ↓
+SQL Query
+     ↓
+SQLAlchemy / psycopg2
+     ↓
+Python
+     ↓
+Pandas DataFrame
+     ↓
+Analysis
+     ↓
+Business Insights
+```
+
+---
+
+# Testing & Error Handling
+
+The Python component also incorporates software-engineering practices rather than relying only on exploratory analysis.
+
+The project includes:
+
+* Exception handling
+* Logging
+* Database connection validation
+* Query error handling
+* Data validation
+* Pandas validation
+* Automated testing with Pytest
+
+This helps make the analytical pipeline more reliable, reproducible, and maintainable.
+
+---
+
+# Final Outcome
+
+The completed project demonstrates an end-to-end ability to work with real-world business data, starting from raw transactional data and progressing toward structured analysis and business decision-making.
+
+The project showcases practical capabilities in:
+
+* **Relational database design**
+* **PostgreSQL**
+* **Advanced SQL**
+* **Data cleaning and validation**
+* **ETL concepts**
+* **Database optimization**
+* **Business KPI development**
+* **Python**
+* **Pandas**
+* **SQL-to-Python integration**
+* **Data testing**
+* **Error handling**
+* **Business intelligence**
+* **Analytical problem solving**
+
+
